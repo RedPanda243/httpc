@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="huffman-tree">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../huffman-tree/huffman-tree.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../huffman-tree/huffman-tree.jar!/" />
+    </SOURCES>
+  </library>
+</component>
