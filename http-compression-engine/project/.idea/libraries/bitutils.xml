@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="bitutils">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../bitutils/bitutils.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../bitutils/bitutils.jar!/" />
+    </SOURCES>
+  </library>
+</component>
