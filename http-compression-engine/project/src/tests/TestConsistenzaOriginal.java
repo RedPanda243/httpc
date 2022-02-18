@@ -29,13 +29,20 @@ public class TestConsistenzaOriginal
 			for (int i=0; i<files.size()/2; i++)
 			{
 				f = new File(original.getAbsolutePath()+"/"+(i+1)+"_c.txt");
-				if (!files.contains(f)) return;
+				if (!files.contains(f))
+				{
+				//	System.out.println(f);
+					return;
+				}
 				fis = new FileInputStream(f);
 				request = new HttpRequest(fis);
 				fis.close();
 
 				f = new File(original.getAbsolutePath()+"/"+(i+1)+"_s.txt");
-				if (!files.contains(f)) return;
+				if (!files.contains(f)) {
+			//		System.out.println(f);
+					return;
+				}
 				fis = new FileInputStream(f);
 				response = new HttpResponse(fis);
 				fis.close();

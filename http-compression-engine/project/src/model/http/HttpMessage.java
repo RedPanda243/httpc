@@ -36,15 +36,14 @@ abstract class HttpMessage
 		}
 		body = new char[0];
 		//Ricerca case-sensitive dell'header Content-Length
-		for (String h:headers.keySet())
-		{
-			if (h.equals("Content-Length"))
-			{
-				body = new char[Integer.parseInt(headers.get(h).replace(" ",""))];
-				l = br.read(body);
+		if (inputStream.available()>0) {
+			for (String h : headers.keySet()) {
+				if (h.equals("Content-Length")) {
+					body = new char[Integer.parseInt(headers.get(h).replace(" ", ""))];
+					l = br.read(body);
+				}
 			}
 		}
-
 	}
 
 	protected void readFirstLine(String line) throws IOException

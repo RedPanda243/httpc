@@ -6,20 +6,26 @@ import prototype.Main;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-/*
+
 public class FiddlerFormatter
 {
 	//I file prodotti da fiddler usano '\n\r' per andare a capo. Riformatto usando solo \n (solo negli header!)
 	public static void main(String args[]) throws IOException
 	{
 		File original = new File(Main.test1+"/original");
+		File backup = new File(Main.test1+"/backup");
 		String box;
-		File temp = new File(original+"/.temp");
-		for (File f: original.listFiles())
+		int i = 0;
+		int l = backup.listFiles().length;
+		for (File f: backup.listFiles())
 		{
-			
-			BufferedReader br = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(temp, StandardCharsets.UTF_8));
+			i++;
+			System.out.println(i+"/"+l);
+			String name = f.getName();
+			while(name.startsWith("0"))
+				name = name.substring(1);
+			BufferedReader br = new BufferedReader(new FileReader(f, StandardCharsets.ISO_8859_1));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(original+"/"+name, StandardCharsets.ISO_8859_1));
 			int index = 0;
 			while((box=br.readLine())!=null && !box.equals(""))
 			{
@@ -30,7 +36,7 @@ public class FiddlerFormatter
 			bw.write("\n");
 			br.close();
 			bw.close();
-			BufferedInputStream bis =new BufferedInputStream(new FileInputStream(f));
+			/*BufferedInputStream bis =new BufferedInputStream(new FileInputStream(f));
 			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(temp,true));
 			byte[] read = new byte[(int)f.length()-index];
 			bis.skip(index);
@@ -38,8 +44,8 @@ public class FiddlerFormatter
 			bos.write(read,0,r);
 			bis.close();
 			bos.close();
-			temp.renameTo(f);
+			f.delete();
+			System.out.println(temp.renameTo(f));*/
 		}
 	}
 }
-*/

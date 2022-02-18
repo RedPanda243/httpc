@@ -2,7 +2,7 @@ package prototype;
 
 import bitutils.BitSequence;
 import bitutils.stream.BitInputStream;
-import huffman.tree.Tree;
+import huffman.tree.v1.Tree;
 import model.ListCouples;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
@@ -13,6 +13,8 @@ import java.util.*;
 
 public class Session
 {
+	private static List<BitSequence> staticEncoder = loadStaticEncoder();
+
 	private Tree queryTree;
 	private Tree responseTree;
 	private String rootdir;
@@ -39,6 +41,281 @@ public class Session
 		try {responseTree = loadTree("/r");}
 		catch(FileNotFoundException e) { reset("/r","HTTP/1.1"); }
 
+	}
+
+	private static List<BitSequence> loadStaticEncoder()
+	{
+		List<BitSequence> l = new ArrayList<>();
+
+		l.add(new BitSequence("1111111111000"));
+		l.add(new BitSequence("11111111111111111011000"));
+		l.add(new BitSequence("1111111111111111111111100010"));
+		l.add(new BitSequence("1111111111111111111111100011"));
+		l.add(new BitSequence("1111111111111111111111100100"));
+		l.add(new BitSequence("1111111111111111111111100101"));
+		l.add(new BitSequence("1111111111111111111111100110"));
+		l.add(new BitSequence("1111111111111111111111100111"));
+		l.add(new BitSequence("1111111111111111111111101000"));
+		l.add(new BitSequence("111111111111111111101010"));
+		l.add(new BitSequence("111111111111111111111111111100"));
+		l.add(new BitSequence("1111111111111111111111101001"));
+		l.add(new BitSequence("1111111111111111111111101010"));
+		l.add(new BitSequence("111111111111111111111111111101"));
+		l.add(new BitSequence("1111111111111111111111101011"));
+		l.add(new BitSequence("1111111111111111111111101100"));
+		l.add(new BitSequence("1111111111111111111111101101"));
+		l.add(new BitSequence("1111111111111111111111101110"));
+		l.add(new BitSequence("1111111111111111111111101111"));
+		l.add(new BitSequence("1111111111111111111111110000"));
+		l.add(new BitSequence("1111111111111111111111110001"));
+		l.add(new BitSequence("1111111111111111111111110010"));
+		l.add(new BitSequence("111111111111111111111111111110"));
+		l.add(new BitSequence("1111111111111111111111110011"));
+		l.add(new BitSequence("1111111111111111111111110100"));
+		l.add(new BitSequence("1111111111111111111111110101"));
+		l.add(new BitSequence("1111111111111111111111110110"));
+		l.add(new BitSequence("1111111111111111111111110111"));
+		l.add(new BitSequence("1111111111111111111111111000"));
+		l.add(new BitSequence("1111111111111111111111111001"));
+		l.add(new BitSequence("1111111111111111111111111010"));
+		l.add(new BitSequence("1111111111111111111111111011"));
+		l.add(new BitSequence("010100"));
+		l.add(new BitSequence("1111111000"));
+		l.add(new BitSequence("1111111001"));
+		l.add(new BitSequence("111111111010"));
+		l.add(new BitSequence("1111111111001"));
+		l.add(new BitSequence("010101"));
+		l.add(new BitSequence("11111000"));
+		l.add(new BitSequence("11111111010"));
+		l.add(new BitSequence("1111111010"));
+		l.add(new BitSequence("1111111011"));
+		l.add(new BitSequence("11111001"));
+		l.add(new BitSequence("11111111011"));
+		l.add(new BitSequence("11111010"));
+		l.add(new BitSequence("010110"));
+		l.add(new BitSequence("010111"));
+		l.add(new BitSequence("011000"));
+		l.add(new BitSequence("00000"));
+		l.add(new BitSequence("00001"));
+		l.add(new BitSequence("00010"));
+		l.add(new BitSequence("011001"));
+		l.add(new BitSequence("011010"));
+		l.add(new BitSequence("011011"));
+		l.add(new BitSequence("011100"));
+		l.add(new BitSequence("011101"));
+		l.add(new BitSequence("011110"));
+		l.add(new BitSequence("011111"));
+		l.add(new BitSequence("1011100"));
+		l.add(new BitSequence("11111011"));
+		l.add(new BitSequence("111111111111100"));
+		l.add(new BitSequence("100000"));
+		l.add(new BitSequence("111111111011"));
+		l.add(new BitSequence("1111111100"));
+		l.add(new BitSequence("1111111111010"));
+		l.add(new BitSequence("100001"));
+		l.add(new BitSequence("1011101"));
+		l.add(new BitSequence("1011110"));
+		l.add(new BitSequence("1011111"));
+		l.add(new BitSequence("1100000"));
+		l.add(new BitSequence("1100001"));
+		l.add(new BitSequence("1100010"));
+		l.add(new BitSequence("1100011"));
+		l.add(new BitSequence("1100100"));
+		l.add(new BitSequence("1100101"));
+		l.add(new BitSequence("1100110"));
+		l.add(new BitSequence("1100111"));
+		l.add(new BitSequence("1101000"));
+		l.add(new BitSequence("1101001"));
+		l.add(new BitSequence("1101010"));
+		l.add(new BitSequence("1101011"));
+		l.add(new BitSequence("1101100"));
+		l.add(new BitSequence("1101101"));
+		l.add(new BitSequence("1101110"));
+		l.add(new BitSequence("1101111"));
+		l.add(new BitSequence("1110000"));
+		l.add(new BitSequence("1110001"));
+		l.add(new BitSequence("1110010"));
+		l.add(new BitSequence("11111100"));
+		l.add(new BitSequence("1110011"));
+		l.add(new BitSequence("11111101"));
+		l.add(new BitSequence("1111111111011"));
+		l.add(new BitSequence("1111111111111110000"));
+		l.add(new BitSequence("1111111111100"));
+		l.add(new BitSequence("11111111111100"));
+		l.add(new BitSequence("100010"));
+		l.add(new BitSequence("111111111111101"));
+		l.add(new BitSequence("00011"));
+		l.add(new BitSequence("100011"));
+		l.add(new BitSequence("00100"));
+		l.add(new BitSequence("100100"));
+		l.add(new BitSequence("00101"));
+		l.add(new BitSequence("100101"));
+		l.add(new BitSequence("100110"));
+		l.add(new BitSequence("100111"));
+		l.add(new BitSequence("00110"));
+		l.add(new BitSequence("1110100"));
+		l.add(new BitSequence("1110101"));
+		l.add(new BitSequence("101000"));
+		l.add(new BitSequence("101001"));
+		l.add(new BitSequence("101010"));
+		l.add(new BitSequence("00111"));
+		l.add(new BitSequence("101011"));
+		l.add(new BitSequence("1110110"));
+		l.add(new BitSequence("101100"));
+		l.add(new BitSequence("01000"));
+		l.add(new BitSequence("01001"));
+		l.add(new BitSequence("101101"));
+		l.add(new BitSequence("1110111"));
+		l.add(new BitSequence("1111000"));
+		l.add(new BitSequence("1111001"));
+		l.add(new BitSequence("1111010"));
+		l.add(new BitSequence("1111011"));
+		l.add(new BitSequence("111111111111110"));
+		l.add(new BitSequence("11111111100"));
+		l.add(new BitSequence("11111111111101"));
+		l.add(new BitSequence("1111111111101"));
+		l.add(new BitSequence("1111111111111111111111111100"));
+		l.add(new BitSequence("11111111111111100110"));
+		l.add(new BitSequence("1111111111111111010010"));
+		l.add(new BitSequence("11111111111111100111"));
+		l.add(new BitSequence("11111111111111101000"));
+		l.add(new BitSequence("1111111111111111010011"));
+		l.add(new BitSequence("1111111111111111010100"));
+		l.add(new BitSequence("1111111111111111010101"));
+		l.add(new BitSequence("11111111111111111011001"));
+		l.add(new BitSequence("1111111111111111010110"));
+		l.add(new BitSequence("11111111111111111011010"));
+		l.add(new BitSequence("11111111111111111011011"));
+		l.add(new BitSequence("11111111111111111011100"));
+		l.add(new BitSequence("11111111111111111011101"));
+		l.add(new BitSequence("11111111111111111011110"));
+		l.add(new BitSequence("111111111111111111101011"));
+		l.add(new BitSequence("11111111111111111011111"));
+		l.add(new BitSequence("111111111111111111101100"));
+		l.add(new BitSequence("111111111111111111101101"));
+		l.add(new BitSequence("1111111111111111010111"));
+		l.add(new BitSequence("11111111111111111100000"));
+		l.add(new BitSequence("111111111111111111101110"));
+		l.add(new BitSequence("11111111111111111100001"));
+		l.add(new BitSequence("11111111111111111100010"));
+		l.add(new BitSequence("11111111111111111100011"));
+		l.add(new BitSequence("11111111111111111100100"));
+		l.add(new BitSequence("111111111111111011100"));
+		l.add(new BitSequence("1111111111111111011000"));
+		l.add(new BitSequence("11111111111111111100101"));
+		l.add(new BitSequence("1111111111111111011001"));
+		l.add(new BitSequence("11111111111111111100110"));
+		l.add(new BitSequence("11111111111111111100111"));
+		l.add(new BitSequence("111111111111111111101111"));
+		l.add(new BitSequence("1111111111111111011010"));
+		l.add(new BitSequence("111111111111111011101"));
+		l.add(new BitSequence("11111111111111101001"));
+		l.add(new BitSequence("1111111111111111011011"));
+		l.add(new BitSequence("1111111111111111011100"));
+		l.add(new BitSequence("11111111111111111101000"));
+		l.add(new BitSequence("11111111111111111101001"));
+		l.add(new BitSequence("111111111111111011110"));
+		l.add(new BitSequence("11111111111111111101010"));
+		l.add(new BitSequence("1111111111111111011101"));
+		l.add(new BitSequence("1111111111111111011110"));
+		l.add(new BitSequence("111111111111111111110000"));
+		l.add(new BitSequence("111111111111111011111"));
+		l.add(new BitSequence("1111111111111111011111"));
+		l.add(new BitSequence("11111111111111111101011"));
+		l.add(new BitSequence("11111111111111111101100"));
+		l.add(new BitSequence("111111111111111100000"));
+		l.add(new BitSequence("111111111111111100001"));
+		l.add(new BitSequence("1111111111111111100000"));
+		l.add(new BitSequence("111111111111111100010"));
+		l.add(new BitSequence("11111111111111111101101"));
+		l.add(new BitSequence("1111111111111111100001"));
+		l.add(new BitSequence("11111111111111111101110"));
+		l.add(new BitSequence("11111111111111111101111"));
+		l.add(new BitSequence("11111111111111101010"));
+		l.add(new BitSequence("1111111111111111100010"));
+		l.add(new BitSequence("1111111111111111100011"));
+		l.add(new BitSequence("1111111111111111100100"));
+		l.add(new BitSequence("11111111111111111110000"));
+		l.add(new BitSequence("1111111111111111100101"));
+		l.add(new BitSequence("1111111111111111100110"));
+		l.add(new BitSequence("11111111111111111110001"));
+		l.add(new BitSequence("11111111111111111111100000"));
+		l.add(new BitSequence("11111111111111111111100001"));
+		l.add(new BitSequence("11111111111111101011"));
+		l.add(new BitSequence("1111111111111110001"));
+		l.add(new BitSequence("1111111111111111100111"));
+		l.add(new BitSequence("11111111111111111110010"));
+		l.add(new BitSequence("1111111111111111101000"));
+		l.add(new BitSequence("1111111111111111111101100"));
+		l.add(new BitSequence("11111111111111111111100010"));
+		l.add(new BitSequence("11111111111111111111100011"));
+		l.add(new BitSequence("11111111111111111111100100"));
+		l.add(new BitSequence("111111111111111111111011110"));
+		l.add(new BitSequence("111111111111111111111011111"));
+		l.add(new BitSequence("11111111111111111111100101"));
+		l.add(new BitSequence("111111111111111111110001"));
+		l.add(new BitSequence("1111111111111111111101101"));
+		l.add(new BitSequence("1111111111111110010"));
+		l.add(new BitSequence("111111111111111100011"));
+		l.add(new BitSequence("11111111111111111111100110"));
+		l.add(new BitSequence("111111111111111111111100000"));
+		l.add(new BitSequence("111111111111111111111100001"));
+		l.add(new BitSequence("11111111111111111111100111"));
+		l.add(new BitSequence("111111111111111111111100010"));
+		l.add(new BitSequence("111111111111111111110010"));
+		l.add(new BitSequence("111111111111111100100"));
+		l.add(new BitSequence("111111111111111100101"));
+		l.add(new BitSequence("11111111111111111111101000"));
+		l.add(new BitSequence("11111111111111111111101001"));
+		l.add(new BitSequence("1111111111111111111111111101"));
+		l.add(new BitSequence("111111111111111111111100011"));
+		l.add(new BitSequence("111111111111111111111100100"));
+		l.add(new BitSequence("111111111111111111111100101"));
+		l.add(new BitSequence("11111111111111101100"));
+		l.add(new BitSequence("111111111111111111110011"));
+		l.add(new BitSequence("11111111111111101101"));
+		l.add(new BitSequence("111111111111111100110"));
+		l.add(new BitSequence("1111111111111111101001"));
+		l.add(new BitSequence("111111111111111100111"));
+		l.add(new BitSequence("111111111111111101000"));
+		l.add(new BitSequence("11111111111111111110011"));
+		l.add(new BitSequence("1111111111111111101010"));
+		l.add(new BitSequence("1111111111111111101011"));
+		l.add(new BitSequence("1111111111111111111101110"));
+		l.add(new BitSequence("1111111111111111111101111"));
+		l.add(new BitSequence("111111111111111111110100"));
+		l.add(new BitSequence("111111111111111111110101"));
+		l.add(new BitSequence("11111111111111111111101010"));
+		l.add(new BitSequence("11111111111111111110100"));
+		l.add(new BitSequence("11111111111111111111101011"));
+		l.add(new BitSequence("111111111111111111111100110"));
+		l.add(new BitSequence("11111111111111111111101100"));
+		l.add(new BitSequence("11111111111111111111101101"));
+		l.add(new BitSequence("111111111111111111111100111"));
+		l.add(new BitSequence("111111111111111111111101000"));
+		l.add(new BitSequence("111111111111111111111101001"));
+		l.add(new BitSequence("111111111111111111111101010"));
+		l.add(new BitSequence("111111111111111111111101011"));
+		l.add(new BitSequence("1111111111111111111111111110"));
+		l.add(new BitSequence("111111111111111111111101100"));
+		l.add(new BitSequence("111111111111111111111101101"));
+		l.add(new BitSequence("111111111111111111111101110"));
+		l.add(new BitSequence("111111111111111111111101111"));
+		l.add(new BitSequence("111111111111111111111110000"));
+		l.add(new BitSequence("11111111111111111111101110"));
+		l.add(new BitSequence("111111111111111111111111111111"));
+		return l;
+	}
+
+	private static BitSequence staticEncode(String string)
+	{
+		BitSequence ret = new BitSequence();
+		for (char c:string.toCharArray())
+		{
+			ret = ret.concat(staticEncoder.get((int)c));
+		}
+		ret = ret.concat(staticEncoder.get(256));
+		return ret;
 	}
 
 	private void initSession() throws IOException
@@ -77,8 +354,8 @@ public class Session
 
 	public BitSequence codeRequest(HttpRequest request) throws IOException
 	{
-		System.out.println("/----------BEGIN CODING REQUEST----------/");
-		System.out.println(request);
+//		System.out.println("/----------BEGIN CODING REQUEST----------/");
+//		System.out.println(request);
 		Object[] box = {new BitSequence(),"/q"};
 		box = codeType1(request.version, (String)box[1],(BitSequence)box[0]);
 //		System.out.println("\nVersion: "+request.version+"\nCode: "+box[0]+" ("+((BitSequence)box[0]).length()+")");
@@ -90,7 +367,7 @@ public class Session
 //		System.out.println("\nParameters size: "+request.parameters.size()+"\nCode: "+box[0]+" ("+((BitSequence)box[0]).length()+")");
 		box = codeType2(request.headers, (String)box[1],(BitSequence)box[0]);
 //		System.out.println("\nHeaders size: "+request.headers.size()+"\nCode: "+box[0]+" ("+((BitSequence)box[0]).length()+")");
-		System.out.println("/----------END CODING REQUEST----------/");
+//		System.out.println("/----------END CODING REQUEST----------/");
 		return (BitSequence)box[0];
 	}
 
@@ -102,26 +379,26 @@ public class Session
 		String[] dec = decodeType1(encodedstream,path);
 		request.version = dec[0];
 		path = dec[1];
-//		System.out.println("Version decoded: "+request.version);
+		System.out.println("Version decoded: "+request.version);
 
 		dec = decodeType1(encodedstream,path);
 		request.method = dec[0];
 		path = dec[1];
-//		System.out.println("Method decoded: "+request.method);
+		System.out.println("Method decoded: "+request.method);
 
 		dec = decodeType3(encodedstream,path);
 		request.url = dec[0];
 		path = dec[1];
-//		System.out.println("URL decoded");
+		System.out.println("URL decoded");
 
 		Object[] dec2 = decodeType2(encodedstream,path);
 		request.parameters = (ListCouples)dec2[0];
 		path = (String)dec2[1];
-//		System.out.println("Parameters decoded");
+		System.out.println("Parameters decoded");
 
 		dec2 = decodeType2(encodedstream,path);
 		request.headers = (ListCouples)dec2[0];
-//		System.out.println("Headers decoded");
+		System.out.println("Headers decoded");
 		System.out.println("\n"+request);
 
 		System.out.println("/----------END CODING REQUEST----------/");
@@ -130,16 +407,16 @@ public class Session
 
 	public BitSequence codeResponse(HttpResponse response) throws IOException
 	{
-		System.out.println("/----------BEGIN CODING RESPONSE----------/");
-		System.out.println(response);
+//		System.out.println("/----------BEGIN CODING RESPONSE----------/");
+//		System.out.println(response);
 		Object[] box = {new BitSequence(),"/r"};
 		box = codeType1(response.version, (String)box[1],(BitSequence)box[0]);
-		System.out.println("\nVersion: "+response.version+"\nCode: "+box[0]);
+//		System.out.println("\nVersion: "+response.version+"\nCode: "+box[0]);
 		box = codeType1(response.status+" "+response.phrase, (String)box[1],(BitSequence)box[0]);
-		System.out.println("\nStatus: "+response.status+"\nCode: "+box[0]);
+//		System.out.println("\nStatus: "+response.status+"\nCode: "+box[0]);
 		box = codeType2(response.headers, (String)box[1],(BitSequence)box[0]);
-		System.out.println("\nHeaders size: "+response.headers.size()+"\nCode: "+box[0]);
-		System.out.println("/----------END CODING RESPONSE----------/");
+//		System.out.println("\nHeaders size: "+response.headers.size()+"\nCode: "+box[0]);
+//		System.out.println("/----------END CODING RESPONSE----------/");
 		return (BitSequence)box[0];
 	}
 
@@ -216,10 +493,11 @@ public class Session
 			return codeType1(string,path,coded);
 		}
 		int intvalue = values.indexOf(string);
-		System.out.print("Coding \""+string+"\": "+intvalue+" ---> ");
+//		System.out.print("Coding \""+string+"\": "+intvalue+" ---> ");
 		if (intvalue == -1) //Nuovo valore
 		{
-			coded = coded.concat(tree.getCode(intvalue)).concat(new BitSequence((string+"\n").getBytes(StandardCharsets.ISO_8859_1)));
+//			coded = coded.concat(tree.getCode(intvalue)).concat(new BitSequence((string+"\n").getBytes(StandardCharsets.ISO_8859_1)));
+			coded = coded.concat(tree.getCode(intvalue)).concat(staticEncode(string));
 			intvalue = values.size();
 			tree.insertInto(intvalue);
 			saveValue(path,string);
@@ -231,7 +509,7 @@ public class Session
 			tree.insertInto(intvalue);
 		}
 		saveTree(path,tree);
-		System.out.println(coded+ "("+coded.length()+")");
+//		System.out.println(coded+ "("+coded.length()+")");
 		return new Object[]{coded,path+"/"+intvalue};
 	}
 
@@ -282,7 +560,7 @@ public class Session
 					boxbits.set(i, bit);
 				}
 				boxbyte = new String(boxbits.toBytes(),StandardCharsets.ISO_8859_1);
-//				System.out.println("\tRead character "+boxbits+" = "+boxbyte);
+				System.out.println("\tRead character "+boxbits+" = "+boxbyte);
 				value = value+boxbyte;
 			}
 			value = value.substring(0,value.length()-1);
@@ -356,6 +634,7 @@ public class Session
 
 		while(!box.equals(""))
 		{
+//			System.err.println(value);
 			value = value+box;
 			dec = decodeType1(stream,path);
 			box = dec[0];
@@ -396,6 +675,13 @@ public class Session
 			index = string.indexOf(".");
 			box = codeType1(dom,(String)box[1],(BitSequence)box[0]);
 		}
+		index = string.indexOf(":");
+		if (index>-1)
+		{
+			dom = string.substring(0,index+1);
+			string = string.substring(index+1);
+			box = codeType1(dom,(String)box[1],(BitSequence)box[0]);
+		}
 		return codeType1(string,(String)box[1],(BitSequence)box[0]);
 	}
 
@@ -405,23 +691,29 @@ public class Session
 			schema url http secondo rfc		http://<host>:<port>/<path>?<searchpart>
 			ma non contempla ne i server dns, ne protocolli basati su http (vedi https).
 			Quindi riformulo in 	protocol://<peer>/<path>?<searchpart>
-			Nota che quel <path> non ha niente a che fare con il path parametro, che verrà rinominato in "relative"
+			Nota che quel <path> non ha niente a che fare con il path parametro del metodo (verrà rinominato in "relative")
 			La parte /<path>?<searchpart> è opzionale
 		 */
-		int index = string.indexOf(":");
-		String protocol = string.substring(0, index+3); //			protocol://
-		String peer = string.substring(index+3);
-		String relative = null;
-		index = peer.indexOf("/");
+		String protocol,peer,relative = null;
 		Object[] box = {coded,path};
 
+		int index = string.indexOf(":");
+		if (index >-1 && string.contains("://")) {
+			protocol = string.substring(0, index + 3); //			protocol://
+			peer = string.substring(index + 3);
+			box = codeType1(protocol,(String)box[1],(BitSequence)box[0]);
+		}
+		else
+			peer = string;
+
+		index = peer.indexOf("/");
 		if (index > -1)
 		{
 			relative = peer.substring(index); //					relative inizia per /
 			peer = peer.substring(0,index);
 		}
 
-		box = codeType1(protocol,(String)box[1],(BitSequence)box[0]);
+
 		box = codePeerURI(peer,(String)box[1],(BitSequence)box[0]);
 		if (relative != null) {
 			box = codeRelativeURI(relative, (String)box[1],(BitSequence)box[0]);

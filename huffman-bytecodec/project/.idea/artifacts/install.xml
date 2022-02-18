@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="install">
+    <output-path>$PROJECT_DIR$/..</output-path>
+    <root id="root">
+      <element id="file-copy" path="$PROJECT_DIR$/.snippet" />
+      <element id="file-copy" path="$PROJECT_DIR$/jshellstart.bat" />
+      <element id="file-copy" path="$PROJECT_DIR$/jshellstart.sh" />
+    </root>
+  </artifact>
+</component>

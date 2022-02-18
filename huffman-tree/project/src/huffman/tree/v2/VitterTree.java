@@ -5,13 +5,9 @@ import bitutils.BitSequence;
 import java.io.*;
 import java.util.*;
 
-public class Tree
+public class VitterTree extends Tree
 {
-	/*---- FIELDS ----*/
-	public Node root;
 
-	// Easily access a node based on its value.
-	protected Map<Integer, Node> seen = new HashMap<>();
 
 	// Keep nodes in order based on weight. Decreasing index breadthfirst!
 	protected List<Node> order = new ArrayList<>();
@@ -24,110 +20,50 @@ public class Tree
 	 * Make a new tree with root == NYT node.
 	 * Add NYT node to order list at index 0.
 	 */
-	public Tree() {
-		root = new Node(null);
+	public VitterTree() {
+		super();
 		order.add(root);
 		this.NYT = root;
 	}
-/*
-	public AdaptiveTree(BitSequence schema, List<Integer> values)
-	{
-		super(schema,values);
-		//Fill order. Indexes decrese breadthfirst.
-		Queue<Node> queue = new LinkedList<>() ;
-		if (root == null)
-			return;
-		queue.clear();
-		queue.add(root);
-		while(!queue.isEmpty()){
-			Node node = queue.remove();
-			order.add(0,node);
-			if(node.right != null) queue.add(node.right);
-			if(node.left != null) queue.add(node.left);
-		}
-		this.NYT = order.get(0);
-		updateNodeIndices();
-	}
-*/
-	/**
-	 * Check if character exists in tree already.
-	 *
-	 * @param value - char to check.
-	 * @return true if exists in tree.
-	 */
-	public boolean contains(Integer value) {
-		if(seen.containsKey(value)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 
-	public boolean contains(BitSequence sequence)
+	@Deprecated
+	public void extend(Integer value)
 	{
-		Node x = getNode(sequence);
-		return x!=null && x.isLeaf();
-	}
 
-	public boolean hasPrefix(BitSequence sequence)
-	{
-		Node x = getNode(sequence);
-		return x!=null && x.left!=null;
-	}
-
-	private Node getNode(BitSequence sequence)
-	{
-		Node x = this.root;
-		try
-		{
-			for (int b:sequence)
-			{
-				if (b==0)
-					x = x.left;
-				else
-					x = x.right;
-			}
-		}
-		catch(NullPointerException npe){return null;}
-		return x;
 	}
 
 	/**
 	 * Insert a value into the tree.
 	 * If value already exists in tree then update node weight
 	 * and rearrange tree if necessary.
-	 * 
+	 *
 	 * @param value - value to insert into tree
 	 * @return false if value does not exist and NYT is removed. In this case the method does nothing.
 	 */
 	public boolean insertInto(Integer value) {
 		// Deal with value that exists in tree first.
-		if(seen.containsKey(value))
-			updateTree(seen.get(value));
+		if(leaves.containsKey(value))
+			updateTree(leaves.get(value));
 		else if (nyt)
 			updateTree(giveBirth(value));
 		else
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Given a value, find its code by traversing the tree.
 	 * Moving left = 0 , moving right = 1
-	 * 
+	 *
 	 * If the given value is not contained in AdaptiveTree the NYT code is returned
-	 * 
+	 *
 	 * @param c - value to find in tree.
 	 * @return - number of bits in the code.
 	 */
 	public BitSequence getCode(Integer c)
 	{
 		if(contains(c))
-			return generateCode(this.seen.get(c));
-/*		if(isEmpty() && !nyt) {
-			return new BitSequence(); // Nothing in tree;
-		}*/
+			return generateCode(this.leaves.get(c));
 		if (nyt)
 			return generateCode(NYT);
 		else
@@ -146,7 +82,7 @@ public class Tree
 			parent.right = null;
 			order.remove(0);
 			order.remove(0);
-			seen.put(leaf.value,parent);
+			leaves.put(leaf.value,parent);
 			NYT = null;
 			updateNodeIndices();
 			this.nyt = false;
@@ -176,10 +112,8 @@ public class Tree
 		return nyt;
 	}
 
-	public boolean isEmpty() {
-		return root.left == null;
-	}
-	
+
+
 	public void save(File file) throws IOException
 	{
 		DataOutputStream dos = new DataOutputStream(new FileOutputStream(file));
@@ -203,9 +137,9 @@ public class Tree
 
 	}
 
-	public static Tree load(File file) throws IOException
+	public static VitterTree load(File file) throws IOException
 	{
-		Tree tree = new Tree();
+		VitterTree tree = new VitterTree();
 		tree.root = null;
 		tree.NYT = null;
 		tree.order.clear();
@@ -223,7 +157,7 @@ public class Tree
 			{
 				node.value = dis.readInt();
 				node.weight = dis.readInt();
-				tree.seen.put(node.value,node);
+				tree.leaves.put(node.value,node);
 			}
 			else
 			{
@@ -246,7 +180,7 @@ public class Tree
 		tree.NYT = tree.order.get(0);
 		return tree;
 	}
-	
+
 	/**
 	 * Take current NYT node and replace it in the tree with an internal node.
 	 * The internal node has an NYT node as left child, and a new leaf as right child.
@@ -255,25 +189,25 @@ public class Tree
 	private Node giveBirth(int value) {
 		Node newNYT = new Node(NYT);
 		Node leaf = new Node(NYT, value);
-		seen.put(value, leaf); // Add new value to seen.
+		leaves.put(value, leaf); // Add new value to leaves.
 		order.add(0,leaf);
 		order.add(0,newNYT);
-		
+
 		Node oldNYT = NYT;
 //		NYT.isNYT = false; // Update the current NYT so that it is now internal node.
 		NYT.left = newNYT; // Set children.
 		NYT.right = leaf;
 		NYT = newNYT; // Turn NYT pointer into the new NYT node.
-		
+
 		updateNodeIndices();
 		return oldNYT;
 	}
-	
+
 	/**
 	 * Update the tree nodes to preserve the invariants that
 	 * sibling nodes have adjacent indices, and that parents 
 	 * have indices equal to the sum of child weights.
-	 * 
+	 *
 	 * @param node
 	 */
 	private void updateTree(Node node) {
@@ -281,7 +215,7 @@ public class Tree
 			if(maxInWeightClass(node))  {
 				Node toSwap = findHighestIndexWeight(node);
 				swap(toSwap,node);
-				
+
 			}
 			node.increment(); // Increment node weight.
 			node = node.parent;
@@ -289,11 +223,11 @@ public class Tree
 		node.increment();
 		node.index = order.indexOf(node);
 	}
-	
+
 	/**
 	 * Check if a node is the highest indexed node
 	 * for its weight value.
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -310,11 +244,11 @@ public class Tree
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Find the node with the highest index that is the
 	 * same weight as the argument node.
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -326,13 +260,13 @@ public class Tree
 		}
 		next = order.get(--index); // Overshot correct index, need to decrement.
 		return next;
-		
+
 	}
-	
+
 	/**
 	 * Swap 2 nodes in a tree, preserving the indices of
 	 * the positions, and the parent nodes.
-	 * 
+	 *
 	 * @param newNodePosition
 	 * @param oldNodeGettingSwapped - node which needs to
 	 * 		change position due to weight increment.
@@ -340,15 +274,15 @@ public class Tree
 	private void swap(Node newNodePosition, Node oldNodeGettingSwapped) {
 		int newIndex = newNodePosition.index;
 		int oldIndex = oldNodeGettingSwapped.index;
-		
+
 		// Keep track of parents of both nodes getting swapped.
 		Node oldParent = oldNodeGettingSwapped.parent;
 		Node newParent = newNodePosition.parent;
-		
+
 		// Need to know if nodes were left or right child.
 		boolean oldNodeWasOnRight, newNodePositionOnRight;
 		oldNodeWasOnRight = newNodePositionOnRight = false;
-		
+
 		if(newNodePosition.parent.right == newNodePosition)
 			newNodePositionOnRight = true;
 
@@ -373,7 +307,7 @@ public class Tree
 		order.set(oldIndex, newNodePosition);
 		updateNodeIndices();
 	}
-	
+
 	/**
 	 * Correct the index value of a node after
 	 * inserting new nodes into the order list.
@@ -386,46 +320,7 @@ public class Tree
 		}
 	}
 
-	public int getValue(BitSequence sequence)
-	{
-		/*Node current = root;
-		for (int i=0; i<sequence.length(); i++)
-		{
-			if (current.isLeaf())
-				return -1;
-			if (sequence.get(i)==0)
-				current = current.left;
-			else
-				current = current.right;
-		}*/
-		Node n = getNode(sequence);
-		return (n==null)?-2:n.value;
-	}
 
-	/**
-	 * Generate in reverse order a list of bits for the code of a value in the tree.
-	 *
-	 * List generated in reverse order because we traverse the tree
-	 * from node up to root.
-	 *
-	 * @param in - Node to start from (leaf or nyt)
-	 * @return BitSequence representing the code
-	 */
-	protected BitSequence generateCode(Node in) {
-		BitSequence seq = new BitSequence();
-		Node node = in;
-		Node parent;
-		while(node.parent != null) //not root
-		{
-			parent = node.parent;
-			if(parent.left == node)
-				seq = BitSequence.zero.concat(seq);
-			else
-				seq = BitSequence.one.concat(seq);
-			node = parent;
-		}
-		return seq;
-	}
 
 	/**
 	 * Print the nodes of the tree using either pre-order

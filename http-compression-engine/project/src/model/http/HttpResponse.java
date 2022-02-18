@@ -54,7 +54,7 @@ public final class HttpResponse extends HttpMessage
 	@Override
 	protected void set2(String line) {
 		line = line.substring(line.indexOf(" ")+1);
-	//	phrase = line.substring(line.indexOf(" ")+1);
-		phrase = line;
+		phrase = line.substring(line.indexOf(" ")+1);
+	//	phrase = line;
 	}
 }

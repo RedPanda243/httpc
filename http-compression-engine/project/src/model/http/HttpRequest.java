@@ -33,6 +33,8 @@ public final class HttpRequest extends HttpMessage
 
 	@Override
 	protected String get1() {
+		if (parameters.size() == 0)
+			return url;
 		String ret = url;
 		for (String n:parameters.names())
 			ret+=n+"="+parameters.get(n)+"&";
